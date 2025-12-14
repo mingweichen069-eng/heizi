@@ -1,0 +1,99 @@
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return """
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>坤坤互动系统</title>
+<style>
+    body {
+        font-family: Arial;
+        background: #f5f5f5;
+        text-align: center;
+        padding-top: 50px;
+    }
+    #box {
+        background: white;
+        width: 320px;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+        padding: 8px;
+        margin-top: 10px;
+        width: 80%;
+    }
+</style>
+</head>
+
+<body>
+<div id="box">
+    <h2>坤坤互动系统</h2>
+    <p id="msg">请选择你的身份</p>
+
+    <button onclick="setRole('小黑子')">我是小黑子</button>
+    <button onclick="setRole('真爱粉')">我是真爱粉</button>
+
+    <div id="chat" style="display:none;">
+        <p id="hint"></p>
+        <input id="text" placeholder="">
+        <br>
+        <button onclick="send()">发送</button>
+        <p id="reply"></p>
+    </div>
+</div>
+
+<script>
+let role = "";
+
+function setRole(r) {
+    role = r;
+    document.getElementById("msg").innerText = "你选择了：" + role;
+    document.getElementById("chat").style.display = "block";
+
+    if (role === "小黑子") {
+        document.getElementById("hint").innerText = "请输入：你太美";
+        document.getElementById("text").placeholder = "试试输入：你太美";
+    } else {
+        document.getElementById("hint").innerText = "请输入：只因 / 鸡";
+        document.getElementById("text").placeholder = "例如：只因";
+    }
+}
+
+function send() {
+    let t = document.getElementById("text").value;
+    let r = "";
+
+    if (role === "小黑子") {
+        if (t === "你太美") {
+            r = "谢谢，你也很美";
+        } else {
+            r = "食不食油饼？";
+        }
+    } else {
+        if (t === "只因") {
+            r = "哎呦你干嘛";
+        } else if (t === "鸡") {
+            r = "小黑子吃柿去吧！";
+        } else {
+            r = "你荔枝一点";
+        }
+    }
+
+    document.getElementById("reply").innerText = r;
+    document.getElementById("text").value = "";
+}
+</script>
+
+</body>
+</html>
+"""
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
